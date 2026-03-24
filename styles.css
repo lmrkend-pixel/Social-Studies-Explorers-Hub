@@ -32,7 +32,7 @@ body {
 }
 
 .wrap {
-  width: min(1100px, 92vw);
+  width: min(1500px, 98vw);
   margin: 0 auto;
 }
 
