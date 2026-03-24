@@ -973,44 +973,61 @@ setQuizVisibility(idForm, submitId, resetId, idResult, idStartWrap, false);
 setQuizVisibility(tfForm, submitTf, resetTf, tfResult, tfStartWrap, false);
 
 const triviaFacts = [
-  "Noong WWI, nagkaroon ng pansamantalang tigil-putukan na tinawag na Christmas Truce noong 1914.",
-  "Gumamit ng mga kalapati bilang tagapagdala ng mensahe noong WWI dahil maaasahan sila.",
-  "Ang trench warfare noong WWI ay nagdulot ng 'trench foot' sa maraming sundalo.",
-  "Ang China ay isa sa pinakamalaking bansang komunista sa kasalukuyan.",
-  "Ang poison gas sa WWI ay maagang halimbawa ng modern chemical warfare.",
-  "Ang WWII ang pinakamalawak at pinakamapaminsalang digmaan sa kasaysayan.",
-  "Ang Berlin Wall ay simbolo ng paghahati ng mundo noong Cold War.",
-  "Sa komunismo tulad ng Soviet Union, kontrolado ng estado ang ekonomiya.",
-  "Si Karl Marx at Friedrich Engels ang may-akda ng Communist Manifesto.",
-  "Ang Hiroshima at Nagasaki bombings ang nagwakas sa WWII sa Asya."
+  {
+    topic: "Christmas Truce (1914)",
+    fact: "Noong Unang Digmaang Pandaigdig, nagkaroon ng pansamantalang tigil-putukan na kilala bilang Christmas Truce noong 1914. Sa panahong ito, tumigil ang ilang sundalo sa labanan at nagkaroon ng mapayapang interaksyon."
+  },
+  {
+    topic: "Messenger Pigeons sa WWI",
+    fact: "Gumamit ng mga kalapati bilang tagapagdala ng mensahe noong WWI dahil mas maaasahan sila kaysa sa ibang paraan ng komunikasyon. May mga kalapati na ginawaran pa ng parangal dahil sa kanilang kontribusyon."
+  },
+  {
+    topic: "Trench Warfare at Trench Foot",
+    fact: "Ang trench warfare noong Unang Digmaang Pandaigdig ay nagdulot ng matinding kondisyon sa kalusugan ng mga sundalo. Marami ang nagkaroon ng sakit na trench foot dahil sa matagal na pagkababad sa putik at tubig."
+  },
+  {
+    topic: "China at Komunismo",
+    fact: "Ang China ay isa sa pinakamalaking bansang komunista sa kasalukuyan. Naitatag ang pamahalaang komunista matapos ang Chinese Revolution sa pamumuno ni Mao Zedong. Hanggang ngayon, nananatili itong may impluwensya sa pandaigdigang politika at ekonomiya."
+  },
+  {
+    topic: "Poison Gas sa WWI",
+    fact: "Ang paggamit ng poison gas noong Unang Digmaang Pandaigdig ay isa sa mga unang halimbawa ng chemical warfare sa modernong panahon. Kabilang dito ang chlorine at mustard gas na nagdulot ng matinding pinsala sa baga at balat. Dahil dito, nagkaroon ng pandaigdigang kasunduan upang limitahan ang paggamit ng ganitong uri ng sandata."
+  },
+  {
+    topic: "World War II Casualties",
+    fact: "Ang World War II ang pinakamalawak at pinakamapaminsalang digmaan sa kasaysayan. Mahigit 70 milyong tao ang nasawi sa digmaang ito."
+  },
+  {
+    topic: "Berlin Wall",
+    fact: "Ang Berlin Wall ay simbolo ng paghahati ng mundo sa panahon ng Cold War. Pinaghiwalay nito ang East at West Germany hanggang sa ito ay bumagsak noong 1989."
+  },
+  {
+    topic: "Ekonomiya sa Komunismo",
+    fact: "Sa ilalim ng komunismo, tulad sa Soviet Union, kontrolado ng estado ang ekonomiya at yaman ng bansa. Layunin nitong alisin ang agwat sa pagitan ng mayaman at mahirap."
+  },
+  {
+    topic: "Communist Manifesto",
+    fact: "Si Karl Marx at si Friedrich Engels ang nagsulat ng Communist Manifesto. Ipinapaliwanag nito ang mga ideya ng komunismo at laban sa kapitalismo."
+  },
+  {
+    topic: "Hiroshima at Nagasaki",
+    fact: "Ang Hiroshima and Nagasaki bombings ang nagwakas sa World War II sa Asia. Ito ang unang paggamit ng atomic bomb sa digmaan."
+  }
 ];
 
-const triviaText = document.getElementById("triviaText");
-const prevTrivia = document.getElementById("prevTrivia");
-const nextTrivia = document.getElementById("nextTrivia");
-const randomTrivia = document.getElementById("randomTrivia");
-let triviaIndex = 0;
+const triviaList = document.getElementById("triviaList");
 
-function renderTrivia() {
-  triviaText.textContent = `${triviaIndex + 1}. ${triviaFacts[triviaIndex]}`;
+if (triviaList) {
+  triviaFacts.forEach((item) => {
+    const card = document.createElement("article");
+    card.className = "card trivia-item";
+    card.innerHTML = `
+      <h4>${item.topic}</h4>
+      <p>${item.fact}</p>
+    `;
+    triviaList.appendChild(card);
+  });
 }
-
-prevTrivia.addEventListener("click", () => {
-  triviaIndex = (triviaIndex - 1 + triviaFacts.length) % triviaFacts.length;
-  renderTrivia();
-});
-
-nextTrivia.addEventListener("click", () => {
-  triviaIndex = (triviaIndex + 1) % triviaFacts.length;
-  renderTrivia();
-});
-
-randomTrivia.addEventListener("click", () => {
-  triviaIndex = Math.floor(Math.random() * triviaFacts.length);
-  renderTrivia();
-});
-
-renderTrivia();
 
 const unmaskedPeople = [
   { clue: "Arkiduke ng Austria-Hungary; pagkakapaslang niya noong 1914 ang mitsa ng WWI.", answer: "Archduke Franz Ferdinand" },
