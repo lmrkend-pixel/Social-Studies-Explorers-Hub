@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Studies Explorers Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <div class="brand">
+        <div class="brand-icon">🌍</div>
+        <div>
+          <h1>SOCIAL STUDIES <span>HUB</span></h1>
+          <p>Explore History &amp; Society</p>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-link active" data-target="home">Home</button>
+        <button class="nav-link" data-target="videos">Video Lessons</button>
+        <button class="nav-link" data-target="quizzes">Quizzes</button>
+        <button class="nav-link" data-target="games">Games</button>
+        <button class="nav-link" data-target="trivia">Trivia Corner</button>
+        <button class="nav-link" data-target="about">About Us</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="home" class="panel visible home-panel">
+      <section class="home-banner card-shell">
+        <h2>Video Discussions</h2>
+        <p class="sub">Explore History &amp; Society</p>
+        <div class="feature-videos">
+          <article class="video-tile v1">
+            <button class="play-dot" data-go="videos" aria-label="Open Ancient Civilizations video">▶</button>
+            <p>Ancient Civilizations</p>
+          </article>
+          <article class="video-tile v2">
+            <button class="play-dot" data-go="videos" aria-label="Open American Revolution video">▶</button>
+            <p>American Revolution</p>
+          </article>
+          <article class="video-tile v3">
+            <button class="play-dot" data-go="videos" aria-label="Open World War II video">▶</button>
+            <p>World War II</p>
+          </article>
+          <article class="video-tile v4">
+            <button class="play-dot" data-go="videos" aria-label="Open Civics and Government video">▶</button>
+            <p>Civics &amp; Government</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="home-features">
+        <article class="mini-panel orange">
+          <h3>Interactive Games</h3>
+          <p>Learn through fun activities!</p>
+          <div class="emoji-art">🗺️ 🔎</div>
+          <button class="mini-btn" data-go="games">Play Now</button>
+        </article>
+        <article class="mini-panel amber">
+          <h3>Quizzes &amp; Challenges</h3>
+          <p>Test your Social Studies Knowledge!</p>
+          <div class="emoji-art">📝 ✏️</div>
+          <button class="mini-btn" data-go="quizzes">Take a Quiz</button>
+        </article>
+        <article class="mini-panel green">
+          <h3>Trivia Corner</h3>
+          <p>Fun Facts &amp; History Challenges!</p>
+          <div class="emoji-art">🌍 🎓</div>
+          <button class="mini-btn" data-go="trivia">Explore Trivia</button>
+        </article>
+      </section>
+
+      <section class="about-strip card-shell">
+        <div class="about-icon">🏫</div>
+        <div>
+          <h3>About Us</h3>
+          <p>Learn More About Our Mission</p>
+          <button class="mini-btn" data-go="about">Read More</button>
+        </div>
+        <div class="about-icon">🛒</div>
+      </section>
+    </section>
+
+    <section id="videos" class="panel">
+      <h2>Video Lessons</h2>
+      <p class="subtext">Select a topic to explore short learning videos and key focus areas.</p>
+      <div id="videoCards" class="grid-4"></div>
+    </section>
+
+    <section id="quizzes" class="panel">
+      <h2>Quizzes &amp; Challenges</h2>
+      <p class="subtext">Choose a quiz set and answer all items. You will get instant feedback.</p>
+
+      <div class="quiz-tabs" id="quizTabs"></div>
+      <form id="quizForm" class="quiz-form"></form>
+      <div class="quiz-actions">
+        <button id="submitQuiz" class="cta">Submit Answers</button>
+        <button id="resetQuiz" class="cta alt" type="button">Reset</button>
+      </div>
+      <div id="quizResult" class="result-box"></div>
+    </section>
+
+    <section id="games" class="panel">
+      <h2>Interactive Games</h2>
+      <div class="games-grid">
+        <article class="card">
+          <h3>History Unmasked</h3>
+          <p>Guess the historical personality from the clue.</p>
+          <div id="unmaskedGame"></div>
+        </article>
+
+        <article class="card">
+          <h3>Flag-tastic Guessing Game</h3>
+          <p>Pick the correct country name for each clue.</p>
+          <div id="flagGame"></div>
+        </article>
+
+        <article class="card full">
+          <h3>Decode the Past: 4 Pics Challenge</h3>
+          <p>Reveal each concept and read the explanation.</p>
+          <div id="decodeGame" class="decode-grid"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="trivia" class="panel">
+      <h2>Trivia Corner</h2>
+      <p class="subtext">Did you know? Swipe through facts or randomize one.</p>
+      <div class="card trivia-card">
+        <p id="triviaText"></p>
+        <div class="trivia-actions">
+          <button id="prevTrivia" class="mini-btn">Previous</button>
+          <button id="nextTrivia" class="mini-btn">Next</button>
+          <button id="randomTrivia" class="mini-btn">Random</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="panel">
+      <h2>About Us</h2>
+      <p class="hero-line">"Explore the Past, Engage the Present, Learn for the Future"</p>
+      <p>
+        Hi! We are third-year students from Batangas State University ARASOF Nasugbu Campus, majoring
+        in Social Studies. This website is part of our research on how social media improves student
+        learning in Social Studies through engaging and technology-driven approaches.
+      </p>
+
+      <div class="card">
+        <h3>What This Platform Offers</h3>
+        <ul class="clean-list">
+          <li>Watch video lessons</li>
+          <li>Play interactive games</li>
+          <li>Answer quizzes with feedback</li>
+          <li>Explore history trivia</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Website Proposal Highlights</h3>
+        <ul class="clean-list">
+          <li><strong>Rationale:</strong> Social media enhances engagement, motivation, and performance.</li>
+          <li><strong>Objectives:</strong> Improve World History achievement through interactive learning.</li>
+          <li><strong>Innovation:</strong> Gamification + social media content for active participation.</li>
+          <li><strong>Expected Outcomes:</strong> Better scores, higher motivation, stronger critical thinking.</li>
+          <li><strong>Conclusion:</strong> A scalable, student-friendly, and technology-driven history platform.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Social Studies Explorers Hub • Educational Front-End Prototype</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
