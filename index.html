@@ -19,7 +19,8 @@
           <p>Explore History &amp; Society</p>
         </div>
       </div>
-      <nav>
+      <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+      <nav id="mainNav">
         <button class="nav-link active" data-target="home">Home</button>
         <button class="nav-link" data-target="videos">Video Lessons</button>
         <button class="nav-link" data-target="quizzes">Quizzes</button>
@@ -93,21 +94,68 @@
       <div id="videoCards" class="grid-4"></div>
     </section>
 
-    <section id="quizzes" class="panel">
-      <h2>Quizzes &amp; Challenges</h2>
-      <p class="subtext">Choose a quiz set and answer all items. You will get instant feedback.</p>
-
-      <div class="quiz-tabs" id="quizTabs"></div>
-      <form id="quizForm" class="quiz-form"></form>
-      <div class="quiz-actions">
-        <button id="submitQuiz" class="cta">Submit Answers</button>
-        <button id="resetQuiz" class="cta alt" type="button">Reset</button>
+    <section id="quizzes" class="panel quizzes-panel">
+      <div class="feature-hero-card">
+        <p class="section-chip">Quizzes</p>
+        <h2>Quizzes</h2>
+        <p class="subtext">Answer topic-based quizzes with instant feedback and clear explanations.</p>
       </div>
-      <div id="quizResult" class="result-box"></div>
+
+      <div class="quiz-page-switch" id="quizPageSwitch">
+        <button class="tab active" type="button" data-quiz-page="mcqPage">Quiz 1 - Multiple Choice</button>
+        <button class="tab" type="button" data-quiz-page="idPage">Quiz 2 - Identification</button>
+        <button class="tab" type="button" data-quiz-page="tfPage">Quiz 3 - Tama o Mali</button>
+      </div>
+
+      <div id="mcqPage" class="quiz-page active quiz-shell card">
+        <h3>Multiple Choice Quiz</h3>
+        <div class="quiz-tabs" id="mcqTopicTabs"></div>
+        <div id="mcqStartWrap" class="quiz-start-wrap">
+          <button id="startMcq" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
+        </div>
+        <form id="mcqForm" class="quiz-form"></form>
+        <div class="quiz-actions">
+          <button id="submitMcq" class="cta">Submit Answers</button>
+          <button id="resetMcq" class="cta alt" type="button">Reset</button>
+        </div>
+        <div id="mcqResult" class="result-box"></div>
+      </div>
+
+      <div id="idPage" class="quiz-page quiz-shell card">
+        <h3>Identification Quiz</h3>
+        <div class="quiz-tabs" id="idTopicTabs"></div>
+        <div id="idStartWrap" class="quiz-start-wrap">
+          <button id="startId" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
+        </div>
+        <form id="idForm" class="quiz-form"></form>
+        <div class="quiz-actions">
+          <button id="submitId" class="cta">Submit Answers</button>
+          <button id="resetId" class="cta alt" type="button">Reset</button>
+        </div>
+        <div id="idResult" class="result-box"></div>
+      </div>
+
+      <div id="tfPage" class="quiz-page quiz-shell card">
+        <h3>Tama o Mali Quiz</h3>
+        <div class="quiz-tabs" id="tfTopicTabs"></div>
+        <div id="tfStartWrap" class="quiz-start-wrap">
+          <button id="startTf" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
+        </div>
+        <form id="tfForm" class="quiz-form"></form>
+        <div class="quiz-actions">
+          <button id="submitTf" class="cta">Submit Answers</button>
+          <button id="resetTf" class="cta alt" type="button">Reset</button>
+        </div>
+        <div id="tfResult" class="result-box"></div>
+      </div>
     </section>
 
-    <section id="games" class="panel">
-      <h2>Interactive Games</h2>
+    <section id="games" class="panel games-panel">
+      <div class="feature-hero-card">
+        <p class="section-chip">Interactive Games</p>
+        <h2>Interactive Games</h2>
+        <p class="subtext">Practice key topics with short game-based activities. Play, learn, and review concepts in a fun format.</p>
+      </div>
       <div class="games-grid">
         <article class="card">
           <h3>History Unmasked</h3>
@@ -143,40 +191,131 @@
     </section>
 
     <section id="about" class="panel">
-      <h2>About Us</h2>
-      <p class="hero-line">"Explore the Past, Engage the Present, Learn for the Future"</p>
-      <p>
-        Hi! We are third-year students from Batangas State University ARASOF Nasugbu Campus, majoring
-        in Social Studies. This website is part of our research on how social media improves student
-        learning in Social Studies through engaging and technology-driven approaches.
-      </p>
+      <h2>Social Studies Educational Website Proposal</h2>
+      <p class="hero-line">Social Studies Explorers Hub: An Interactive Learning Platform for Grade 8 World History</p>
 
-      <div class="card">
-        <h3>What This Platform Offers</h3>
+      <div class="card proposal-card">
+        <h3>I. Rationale</h3>
+        <p>
+          In today’s digital era, social media platforms such as YouTube and TikTok play a significant role in
+          students’ learning experiences. Based on the findings of the study “The Effects of Using Social Media in
+          Learning Achievements of Grade 8 Learners in Social Studies,” social media enhances academic performance,
+          engagement, and motivation.
+        </p>
+        <h4>Definition of Terms</h4>
         <ul class="clean-list">
-          <li>Watch video lessons</li>
-          <li>Play interactive games</li>
-          <li>Answer quizzes with feedback</li>
-          <li>Explore history trivia</li>
+          <li><strong>Social Media:</strong> Digital platforms that allow users to create, share, and interact with content.</li>
+          <li><strong>Learning Achievement:</strong> The measurable academic performance of students.</li>
+          <li><strong>Engagement:</strong> The level of participation and involvement in learning activities.</li>
+          <li><strong>Motivation:</strong> The internal drive that encourages students to learn and participate.</li>
+          <li><strong>Interactive Learning:</strong> A method of teaching that actively involves students through activities and participation.</li>
         </ul>
       </div>
 
-      <div class="card">
-        <h3>Website Proposal Highlights</h3>
+      <div class="card proposal-card">
+        <h3>II. Objectives</h3>
         <ul class="clean-list">
-          <li><strong>Rationale:</strong> Social media enhances engagement, motivation, and performance.</li>
-          <li><strong>Objectives:</strong> Improve World History achievement through interactive learning.</li>
-          <li><strong>Innovation:</strong> Gamification + social media content for active participation.</li>
-          <li><strong>Expected Outcomes:</strong> Better scores, higher motivation, stronger critical thinking.</li>
-          <li><strong>Conclusion:</strong> A scalable, student-friendly, and technology-driven history platform.</li>
+          <li>Improve learning achievement in World History.</li>
+          <li>Provide engaging video lessons.</li>
+          <li>Encourage participation through interactive games and quizzes.</li>
+          <li>Reinforce learning through feedback-based activities.</li>
+          <li>Promote interest using trivia and fun facts.</li>
         </ul>
+      </div>
+
+      <div class="card proposal-card">
+        <h3>III. Website Features</h3>
+        <h4>1) Homepage</h4>
+        <ul class="clean-list">
+          <li>Introduction and welcome video.</li>
+          <li>Easy navigation.</li>
+        </ul>
+        <h4>2) Video Lessons Page</h4>
+        <p>Embedded YouTube and TikTok videos organized by topics:</p>
+        <ul class="clean-list">
+          <li>Imperialism and Colonialism</li>
+          <li>World War I</li>
+          <li>World War II</li>
+          <li>Cold War</li>
+        </ul>
+        <h4>3) Interactive Games and Quizzes</h4>
+        <ul class="clean-list">
+          <li><strong>Interactive Games:</strong> Digital activities designed to enhance learning through play.</li>
+          <li><strong>Quizzes:</strong> Assessment tools used to measure understanding.</li>
+        </ul>
+        <p>Types include:</p>
+        <ul class="clean-list">
+          <li>Multiple Choice Quiz</li>
+          <li>True or False</li>
+          <li>Matching Type</li>
+          <li>Timeline Game</li>
+          <li>Map Identification Game</li>
+        </ul>
+        <p>Core features include instant feedback, score display, and explanations of answers.</p>
+        <h4>4) Trivia Corner</h4>
+        <ul class="clean-list">
+          <li><strong>Trivia:</strong> Interesting facts used to increase curiosity and engagement.</li>
+          <li>Includes “Did You Know?” facts.</li>
+        </ul>
+        <h4>5) About Us Page</h4>
+        <ul class="clean-list">
+          <li>Research background</li>
+          <li>Purpose</li>
+          <li>Researchers’ profile</li>
+        </ul>
+      </div>
+
+      <div class="card proposal-card">
+        <h3>IV. Website Structure</h3>
+        <ul class="clean-list">
+          <li>Home</li>
+          <li>Video Lessons</li>
+          <li>Games and Quizzes</li>
+          <li>Trivia Corner</li>
+          <li>About Us</li>
+        </ul>
+      </div>
+
+      <div class="card proposal-card">
+        <h3>V. Innovation</h3>
+        <ul class="clean-list">
+          <li>Combines social media and education.</li>
+          <li>Uses gamification.</li>
+          <li>Promotes active learning.</li>
+        </ul>
+        <p><strong>Gamification:</strong> The application of game elements in non-game contexts to improve engagement.</p>
+      </div>
+
+      <div class="card proposal-card">
+        <h3>VI. Expected Outcomes</h3>
+        <ul class="clean-list">
+          <li><strong>Improved Academic Performance:</strong> Students will demonstrate measurable gains in World History mastery, targeting a 20-25% increase in quiz scores and content retention through interactive video lessons, gamified assessments, and instant feedback.</li>
+          <li><strong>Increased Student Motivation:</strong> The platform aims to boost intrinsic motivation by 30% (measured via pre/post surveys) through familiar social media formats, badges, leaderboards, and weekly trivia challenges.</li>
+          <li><strong>Enhanced Engagement Levels:</strong> Interactive features target 80%+ lesson completion rates and higher time-on-task through timeline games, map identification, and collaborative quiz challenges.</li>
+          <li><strong>Strengthened Critical Thinking:</strong> Learners will develop evidence-based reasoning through primary source analysis, branching quizzes, and discussion prompts connecting history to modern Philippine contexts.</li>
+        </ul>
+      </div>
+
+      <div class="card proposal-card">
+        <h3>VII. Conclusion</h3>
+        <p>
+          The Social Studies Explorers Hub presents a transformative approach to Grade 8 World History learning by
+          integrating popular social media formats with interactive educational design. Through gamified quizzes,
+          timeline challenges, map activities, and AI-enhanced trivia, the platform improves achievement, engagement,
+          and motivation while supporting DepEd digital learning priorities for 2026.
+        </p>
+        <p>
+          With mobile-first accessibility, multilingual support (English and Tagalog), offline download capability, and
+          teacher dashboards for monitoring progress, the platform provides a scalable and sustainable model for
+          technology-driven Social Studies education in diverse Philippine school settings.
+        </p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>Social Studies Explorers Hub • Educational Front-End Prototype</p>
+      <p>Social Studies Explorers Hub — Grade 8 World History · For educational use</p>
     </div>
   </footer>
 

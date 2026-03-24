@@ -1,10 +1,19 @@
 const panels = document.querySelectorAll(".panel");
 const navLinks = document.querySelectorAll(".nav-link");
 const goButtons = document.querySelectorAll("[data-go]");
+const menuToggle = document.getElementById("menuToggle");
+const mainNav = document.getElementById("mainNav");
 
 function showSection(id) {
   panels.forEach((panel) => panel.classList.toggle("visible", panel.id === id));
   navLinks.forEach((link) => link.classList.toggle("active", link.dataset.target === id));
+  if (mainNav && mainNav.classList.contains("open")) {
+    mainNav.classList.remove("open");
+    if (menuToggle) {
+      menuToggle.setAttribute("aria-expanded", "false");
+    }
+  }
+  window.location.hash = id;
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -15,6 +24,25 @@ navLinks.forEach((link) => {
 goButtons.forEach((btn) => {
   btn.addEventListener("click", () => showSection(btn.dataset.go));
 });
+
+if (menuToggle && mainNav) {
+  menuToggle.addEventListener("click", () => {
+    const opened = mainNav.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(opened));
+  });
+}
+
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 860 && mainNav && menuToggle) {
+    mainNav.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  }
+});
+
+const sectionFromHash = window.location.hash.replace("#", "");
+if (sectionFromHash && document.getElementById(sectionFromHash)) {
+  showSection(sectionFromHash);
+}
 
 const videoData = [
   {
@@ -50,7 +78,7 @@ videoData.forEach((item) => {
   videoCards.appendChild(card);
 });
 
-const quizSets = [
+const mcqQuizSets = [
   {
     id: "imp",
     title: "Imperyalismo at Kolonyalismo",
@@ -262,82 +290,515 @@ const quizSets = [
   }
 ];
 
-const quizTabs = document.getElementById("quizTabs");
-const quizForm = document.getElementById("quizForm");
-const quizResult = document.getElementById("quizResult");
-const submitQuizBtn = document.getElementById("submitQuiz");
-const resetQuizBtn = document.getElementById("resetQuiz");
-let activeQuiz = quizSets[0];
+const identificationQuizSets = [
+  {
+    id: "imp-id",
+    title: "Imperyalismo at Kolonyalismo",
+    questions: [
+      {
+        q: "1) Ano ang tawag sa patakaran kung saan pinalalawak ng makapangyarihang bansa ang impluwensya sa ibang teritoryo?",
+        answers: ["imperyalismo"]
+      },
+      {
+        q: "2) Anong kasunduan noong 1494 ang naghati sa mundo sa pagitan ng Spain at Portugal?",
+        answers: ["treaty of tordesillas", "kasunduan sa tordesillas"]
+      },
+      {
+        q: "3) Ano ang pangunahing dahilan kung bakit naghahangad ng kolonya ang mga bansang Europeo?",
+        answers: ["hilaw na materyales at pamilihan", "raw materials and markets", "hilaw na materyales"]
+      }
+    ]
+  },
+  {
+    id: "ww1-id",
+    title: "Unang Digmaang Pandaigdig",
+    questions: [
+      {
+        q: "1) Sino ang pagkakapaslang noong 1914 na naging mitsa ng WWI?",
+        answers: ["archduke franz ferdinand", "franz ferdinand"]
+      },
+      {
+        q: "2) Ano ang tawag sa mabagal at patagalan na paraan ng labanan sa WWI?",
+        answers: ["trench warfare", "pakikidigmang trintsera", "digmaang trintsera"]
+      },
+      {
+        q: "3) Anong kasunduan ang naglagay ng mabigat na parusa sa Germany matapos ang WWI?",
+        answers: ["treaty of versailles", "kasunduan sa versailles"]
+      }
+    ]
+  },
+  {
+    id: "ww2-id",
+    title: "Ikalawang Digmaang Pandaigdig",
+    questions: [
+      {
+        q: "1) Aling bansa ang sinalakay ng Germany noong 1939 na nagpasimula ng WWII sa Europe?",
+        answers: ["poland"]
+      },
+      {
+        q: "2) Ano ang codename ng malawakang paglusob ng Allied Forces sa Normandy noong 1944?",
+        answers: ["d-day", "operation overlord"]
+      },
+      {
+        q: "3) Aling dalawang lungsod sa Japan ang binagsakan ng atomic bombs?",
+        answers: ["hiroshima at nagasaki", "hiroshima and nagasaki", "hiroshima, nagasaki"]
+      }
+    ]
+  },
+  {
+    id: "cold-id",
+    title: "Cold War",
+    questions: [
+      {
+        q: "1) Aling dalawang superpower ang pangunahing magkatunggali sa Cold War?",
+        answers: ["us at ussr", "united states and ussr", "america at soviet union"]
+      },
+      {
+        q: "2) Ano ang krisis noong 1962 na nagdala sa mundo sa bingit ng nuclear war?",
+        answers: ["cuban missile crisis"]
+      },
+      {
+        q: "3) Ano ang tawag sa teorya ng pagkalat ng komunismo mula isang bansa patungo sa iba?",
+        answers: ["domino theory", "teoryang domino"]
+      }
+    ]
+  }
+];
 
-function renderQuizTabs() {
-  quizTabs.innerHTML = "";
-  quizSets.forEach((set) => {
+const tfQuizSets = [
+  {
+    id: "imp-tf",
+    title: "Imperyalismo at Kolonyalismo",
+    questions: [
+      { q: "1) Ang kolonyalismo ay direktang pananakop at pamamahala sa ibang lupain.", answer: true },
+      { q: "2) Ang Treaty of Tordesillas ay kasunduan ng Germany at Russia.", answer: false },
+      { q: "3) Isa sa dahilan ng imperyalismo ang paghahanap ng pamilihan at hilaw na materyales.", answer: true }
+    ]
+  },
+  {
+    id: "ww1-tf",
+    title: "Unang Digmaang Pandaigdig",
+    questions: [
+      { q: "1) Ang assassination ni Archduke Franz Ferdinand ay may kaugnayan sa pagsiklab ng WWI.", answer: true },
+      { q: "2) Naging mabilis at maikling digmaan ang trench warfare.", answer: false },
+      { q: "3) Mabigat ang naging epekto ng Treaty of Versailles sa Germany.", answer: true }
+    ]
+  },
+  {
+    id: "ww2-tf",
+    title: "Ikalawang Digmaang Pandaigdig",
+    questions: [
+      { q: "1) Nagsimula ang WWII sa Europe matapos salakayin ng Germany ang Poland.", answer: true },
+      { q: "2) Ang D-Day ay naganap sa Pacific front laban sa Japan.", answer: false },
+      { q: "3) Ang Hiroshima at Nagasaki bombings ay nag-ambag sa pagsuko ng Japan.", answer: true }
+    ]
+  },
+  {
+    id: "cold-tf",
+    title: "Cold War",
+    questions: [
+      { q: "1) Direktang naglaban sa malaking digmaan ang US at USSR sa Cold War.", answer: false },
+      { q: "2) Ang Cuban Missile Crisis ang isa sa pinakadelikadong yugto ng Cold War.", answer: true },
+      { q: "3) Ang Domino Theory ay tungkol sa pagkalat ng komunismo sa magkakatabing bansa.", answer: true }
+    ]
+  }
+];
+
+const quizPages = document.querySelectorAll(".quiz-page");
+const quizPageButtons = document.querySelectorAll("[data-quiz-page]");
+const mcqTopicTabs = document.getElementById("mcqTopicTabs");
+const mcqForm = document.getElementById("mcqForm");
+const mcqResult = document.getElementById("mcqResult");
+const submitMcq = document.getElementById("submitMcq");
+const resetMcq = document.getElementById("resetMcq");
+const startMcq = document.getElementById("startMcq");
+const mcqStartWrap = document.getElementById("mcqStartWrap");
+const idTopicTabs = document.getElementById("idTopicTabs");
+const idForm = document.getElementById("idForm");
+const idResult = document.getElementById("idResult");
+const submitId = document.getElementById("submitId");
+const resetId = document.getElementById("resetId");
+const startId = document.getElementById("startId");
+const idStartWrap = document.getElementById("idStartWrap");
+const tfTopicTabs = document.getElementById("tfTopicTabs");
+const tfForm = document.getElementById("tfForm");
+const tfResult = document.getElementById("tfResult");
+const submitTf = document.getElementById("submitTf");
+const resetTf = document.getElementById("resetTf");
+const startTf = document.getElementById("startTf");
+const tfStartWrap = document.getElementById("tfStartWrap");
+
+let activeMcq = mcqQuizSets[0];
+let activeId = identificationQuizSets[0];
+let activeTf = tfQuizSets[0];
+const quizState = {
+  mcq: { index: 0, score: 0, revealed: false, started: false },
+  id: { index: 0, score: 0, revealed: false, started: false },
+  tf: { index: 0, score: 0, revealed: false, started: false }
+};
+
+function setQuizVisibility(formEl, submitBtn, resetBtn, resultEl, startWrapEl, isOpen) {
+  formEl.classList.toggle("quiz-locked", !isOpen);
+  submitBtn.classList.toggle("quiz-locked", !isOpen);
+  resetBtn.classList.toggle("quiz-locked", !isOpen);
+  resultEl.classList.toggle("quiz-locked", !isOpen);
+  startWrapEl.classList.toggle("quiz-locked", isOpen);
+}
+
+function normalizeAnswer(value) {
+  return value.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function switchQuizPage(pageId) {
+  quizPages.forEach((page) => page.classList.toggle("active", page.id === pageId));
+  quizPageButtons.forEach((btn) => btn.classList.toggle("active", btn.dataset.quizPage === pageId));
+}
+
+quizPageButtons.forEach((btn) => {
+  btn.addEventListener("click", () => switchQuizPage(btn.dataset.quizPage));
+});
+
+function updateQuizProgress(formEl, quizSet, state, typeTag) {
+  const total = quizSet.questions.length;
+  const answered = Math.min(state.index + (state.revealed ? 1 : 0), total);
+  const progressNode = formEl.querySelector(".quiz-progress");
+  if (!progressNode) return;
+
+  const pct = total ? Math.round((answered / total) * 100) : 0;
+  const fill = progressNode.querySelector(".fill");
+  const scoreNode = progressNode.querySelector(".score-value");
+  const progress = progressNode.querySelector(".progress-value");
+
+  const typeNode = progressNode.querySelector(".type-value");
+
+  if (fill) fill.style.width = `${pct}%`;
+  if (scoreNode) scoreNode.textContent = state.score;
+  if (progress) progress.textContent = `${answered}/${total}`;
+  if (typeNode) typeNode.textContent = typeTag;
+}
+
+function renderTopicTabs(targetEl, sets, activeSet, onChange) {
+  targetEl.innerHTML = "";
+  sets.forEach((set) => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = `tab ${set.id === activeQuiz.id ? "active" : ""}`;
+    btn.className = `tab ${set.id === activeSet.id ? "active" : ""}`;
     btn.textContent = set.title;
-    btn.addEventListener("click", () => {
-      activeQuiz = set;
-      renderQuizTabs();
-      renderQuizForm();
-      quizResult.textContent = "";
-    });
-    quizTabs.appendChild(btn);
+    btn.addEventListener("click", () => onChange(set));
+    targetEl.appendChild(btn);
   });
 }
 
-function renderQuizForm() {
-  quizForm.innerHTML = "";
-  const progress = document.createElement("p");
-  progress.className = "quiz-progress";
-  progress.textContent = `Questions: ${activeQuiz.questions.length}`;
-  quizForm.appendChild(progress);
-
-  activeQuiz.questions.forEach((question, i) => {
-    const fieldset = document.createElement("fieldset");
-    fieldset.className = "quiz-item";
-    fieldset.innerHTML = `<legend>${question.q}</legend>`;
-
-    question.options.forEach((opt, index) => {
-      const id = `${activeQuiz.id}-${i}-${index}`;
-      const label = document.createElement("label");
-      label.setAttribute("for", id);
-      label.innerHTML = `
-        <input id="${id}" type="radio" name="${activeQuiz.id}-${i}" value="${index}" />
-        ${opt}
-      `;
-      fieldset.appendChild(label);
-    });
-    quizForm.appendChild(fieldset);
-  });
-}
-
-submitQuizBtn.addEventListener("click", () => {
-  let score = 0;
-  const total = activeQuiz.questions.length;
-
-  activeQuiz.questions.forEach((question, i) => {
-    const checked = quizForm.querySelector(`input[name="${activeQuiz.id}-${i}"]:checked`);
-    if (checked && Number(checked.value) === question.answer) {
-      score += 1;
-    }
-  });
-
-  const pct = Math.round((score / total) * 100);
-  quizResult.innerHTML = `
+function getFinalMessage(score, total) {
+  const pct = total ? Math.round((score / total) * 100) : 0;
+  return `
     <strong>Your Score:</strong> ${score}/${total} (${pct}%)
     <br />
     ${pct >= 80 ? "Excellent work! Keep it up." : "Review the topic and try again for a higher score."}
   `;
+}
+
+function renderMcqForm() {
+  const state = quizState.mcq;
+  mcqForm.innerHTML = "";
+  const total = activeMcq.questions.length;
+  const progress = document.createElement("p");
+  progress.className = "quiz-progress";
+  progress.innerHTML = `
+    <span class="meta">
+      <span class="type-value">MCQ</span>
+      <span>Score: <span class="score-value">${state.score}</span> | Progress: <span class="progress-value">0/${total}</span></span>
+    </span>
+    <span class="track"><span class="fill"></span></span>
+  `;
+  mcqForm.appendChild(progress);
+
+  if (state.index >= total) {
+    mcqForm.innerHTML += `<p class="game-result">Quiz complete! Great job.</p>`;
+    submitMcq.textContent = "Completed";
+    submitMcq.disabled = true;
+    resetMcq.classList.remove("quiz-locked");
+    updateQuizProgress(mcqForm, activeMcq, state, "MCQ");
+    mcqResult.innerHTML = getFinalMessage(state.score, total);
+    return;
+  }
+
+  const question = activeMcq.questions[state.index];
+  const fieldset = document.createElement("fieldset");
+  fieldset.className = "quiz-item";
+  fieldset.innerHTML = `<legend>${question.q}</legend>`;
+  question.options.forEach((opt, index) => {
+    const id = `${activeMcq.id}-${state.index}-${index}`;
+    const label = document.createElement("label");
+    label.setAttribute("for", id);
+    label.innerHTML = `
+      <input id="${id}" type="radio" name="${activeMcq.id}-${state.index}" value="${index}" />
+      ${opt}
+    `;
+    fieldset.appendChild(label);
+  });
+  fieldset.innerHTML += `<p id="mcqFeedback" class="game-result"></p>`;
+  mcqForm.appendChild(fieldset);
+
+  submitMcq.disabled = false;
+  submitMcq.textContent = state.revealed ? "Continue" : "Next";
+  updateQuizProgress(mcqForm, activeMcq, state, "MCQ");
+}
+
+function renderIdForm() {
+  const state = quizState.id;
+  idForm.innerHTML = "";
+  const total = activeId.questions.length;
+  const progress = document.createElement("p");
+  progress.className = "quiz-progress";
+  progress.innerHTML = `
+    <span class="meta">
+      <span class="type-value">Identification</span>
+      <span>Score: <span class="score-value">${state.score}</span> | Progress: <span class="progress-value">0/${total}</span></span>
+    </span>
+    <span class="track"><span class="fill"></span></span>
+  `;
+  idForm.appendChild(progress);
+
+  if (state.index >= total) {
+    idForm.innerHTML += `<p class="game-result">Quiz complete! Great job.</p>`;
+    submitId.textContent = "Completed";
+    submitId.disabled = true;
+    resetId.classList.remove("quiz-locked");
+    updateQuizProgress(idForm, activeId, state, "Identification");
+    idResult.innerHTML = getFinalMessage(state.score, total);
+    return;
+  }
+
+  const question = activeId.questions[state.index];
+  const fieldset = document.createElement("fieldset");
+  fieldset.className = "quiz-item";
+  const id = `${activeId.id}-${state.index}`;
+  fieldset.innerHTML = `
+    <legend>${question.q}</legend>
+    <input id="${id}" type="text" placeholder="Type your answer here..." autocomplete="off" />
+    <p id="idFeedback" class="game-result"></p>
+  `;
+  idForm.appendChild(fieldset);
+
+  submitId.disabled = false;
+  submitId.textContent = state.revealed ? "Continue" : "Next";
+  updateQuizProgress(idForm, activeId, state, "Identification");
+}
+
+function renderTfForm() {
+  const state = quizState.tf;
+  tfForm.innerHTML = "";
+  const total = activeTf.questions.length;
+  const progress = document.createElement("p");
+  progress.className = "quiz-progress";
+  progress.innerHTML = `
+    <span class="meta">
+      <span class="type-value">Tama o Mali</span>
+      <span>Score: <span class="score-value">${state.score}</span> | Progress: <span class="progress-value">0/${total}</span></span>
+    </span>
+    <span class="track"><span class="fill"></span></span>
+  `;
+  tfForm.appendChild(progress);
+
+  if (state.index >= total) {
+    tfForm.innerHTML += `<p class="game-result">Quiz complete! Great job.</p>`;
+    submitTf.textContent = "Completed";
+    submitTf.disabled = true;
+    resetTf.classList.remove("quiz-locked");
+    updateQuizProgress(tfForm, activeTf, state, "Tama o Mali");
+    tfResult.innerHTML = getFinalMessage(state.score, total);
+    return;
+  }
+
+  const question = activeTf.questions[state.index];
+  const fieldset = document.createElement("fieldset");
+  fieldset.className = "quiz-item";
+  fieldset.innerHTML = `<legend>${question.q}</legend>`;
+  ["Tama", "Mali"].forEach((opt, index) => {
+    const id = `${activeTf.id}-${state.index}-${index}`;
+    const label = document.createElement("label");
+    label.setAttribute("for", id);
+    label.innerHTML = `
+      <input id="${id}" type="radio" name="${activeTf.id}-${state.index}" value="${index === 0 ? "true" : "false"}" />
+      ${opt}
+    `;
+    fieldset.appendChild(label);
+  });
+  fieldset.innerHTML += `<p id="tfFeedback" class="game-result"></p>`;
+  tfForm.appendChild(fieldset);
+
+  submitTf.disabled = false;
+  submitTf.textContent = state.revealed ? "Continue" : "Next";
+  updateQuizProgress(tfForm, activeTf, state, "Tama o Mali");
+}
+
+function checkMcqStep() {
+  const state = quizState.mcq;
+  if (state.revealed) {
+    state.index += 1;
+    state.revealed = false;
+    renderMcqForm();
+    return;
+  }
+  const question = activeMcq.questions[state.index];
+  const checked = mcqForm.querySelector(`input[name="${activeMcq.id}-${state.index}"]:checked`);
+  if (!checked) {
+    mcqResult.textContent = "Please choose an answer first.";
+    return;
+  }
+  const isCorrect = Number(checked.value) === question.answer;
+  if (isCorrect) state.score += 1;
+  const feedback = mcqForm.querySelector("#mcqFeedback");
+  if (feedback) {
+    feedback.textContent = isCorrect
+      ? "Correct!"
+      : `Incorrect. Correct answer: ${question.options[question.answer]}`;
+  }
+  mcqResult.textContent = "";
+  state.revealed = true;
+  submitMcq.textContent = state.index === activeMcq.questions.length - 1 ? "See Result" : "Continue";
+  updateQuizProgress(mcqForm, activeMcq, state, "MCQ");
+}
+
+function checkIdStep() {
+  const state = quizState.id;
+  if (state.revealed) {
+    state.index += 1;
+    state.revealed = false;
+    renderIdForm();
+    return;
+  }
+  const question = activeId.questions[state.index];
+  const input = idForm.querySelector(`#${activeId.id}-${state.index}`);
+  if (!input || !input.value.trim()) {
+    idResult.textContent = "Please type your answer first.";
+    return;
+  }
+  const userValue = normalizeAnswer(input.value);
+  const accepted = question.answers.map(normalizeAnswer);
+  const isCorrect = accepted.includes(userValue);
+  if (isCorrect) state.score += 1;
+  const feedback = idForm.querySelector("#idFeedback");
+  if (feedback) {
+    feedback.textContent = isCorrect
+      ? "Correct!"
+      : `Incorrect. Correct answer: ${question.answers[0]}`;
+  }
+  idResult.textContent = "";
+  state.revealed = true;
+  submitId.textContent = state.index === activeId.questions.length - 1 ? "See Result" : "Continue";
+  updateQuizProgress(idForm, activeId, state, "Identification");
+}
+
+function checkTfStep() {
+  const state = quizState.tf;
+  if (state.revealed) {
+    state.index += 1;
+    state.revealed = false;
+    renderTfForm();
+    return;
+  }
+  const question = activeTf.questions[state.index];
+  const checked = tfForm.querySelector(`input[name="${activeTf.id}-${state.index}"]:checked`);
+  if (!checked) {
+    tfResult.textContent = "Please choose Tama or Mali first.";
+    return;
+  }
+  const isCorrect = String(question.answer) === checked.value;
+  if (isCorrect) state.score += 1;
+  const feedback = tfForm.querySelector("#tfFeedback");
+  if (feedback) {
+    feedback.textContent = isCorrect
+      ? "Correct!"
+      : `Incorrect. Correct answer: ${question.answer ? "Tama" : "Mali"}`;
+  }
+  tfResult.textContent = "";
+  state.revealed = true;
+  submitTf.textContent = state.index === activeTf.questions.length - 1 ? "See Result" : "Continue";
+  updateQuizProgress(tfForm, activeTf, state, "Tama o Mali");
+}
+
+submitMcq.addEventListener("click", checkMcqStep);
+submitId.addEventListener("click", checkIdStep);
+submitTf.addEventListener("click", checkTfStep);
+
+resetMcq.addEventListener("click", () => {
+  quizState.mcq = { index: 0, score: 0, revealed: false, started: true };
+  mcqResult.textContent = "";
+  renderMcqForm();
 });
 
-resetQuizBtn.addEventListener("click", () => {
-  quizForm.reset();
-  quizResult.textContent = "";
+resetId.addEventListener("click", () => {
+  quizState.id = { index: 0, score: 0, revealed: false, started: true };
+  idResult.textContent = "";
+  renderIdForm();
 });
 
-renderQuizTabs();
-renderQuizForm();
+resetTf.addEventListener("click", () => {
+  quizState.tf = { index: 0, score: 0, revealed: false, started: true };
+  tfResult.textContent = "";
+  renderTfForm();
+});
+
+startMcq.addEventListener("click", () => {
+  quizState.mcq = { index: 0, score: 0, revealed: false, started: true };
+  mcqResult.textContent = "";
+  renderMcqForm();
+  setQuizVisibility(mcqForm, submitMcq, resetMcq, mcqResult, mcqStartWrap, true);
+});
+
+startId.addEventListener("click", () => {
+  quizState.id = { index: 0, score: 0, revealed: false, started: true };
+  idResult.textContent = "";
+  renderIdForm();
+  setQuizVisibility(idForm, submitId, resetId, idResult, idStartWrap, true);
+});
+
+startTf.addEventListener("click", () => {
+  quizState.tf = { index: 0, score: 0, revealed: false, started: true };
+  tfResult.textContent = "";
+  renderTfForm();
+  setQuizVisibility(tfForm, submitTf, resetTf, tfResult, tfStartWrap, true);
+});
+
+function onMcqTopicChange(set) {
+  activeMcq = set;
+  quizState.mcq = { index: 0, score: 0, revealed: false, started: false };
+  mcqResult.textContent = "";
+  renderTopicTabs(mcqTopicTabs, mcqQuizSets, activeMcq, onMcqTopicChange);
+  renderMcqForm();
+  setQuizVisibility(mcqForm, submitMcq, resetMcq, mcqResult, mcqStartWrap, false);
+}
+
+function onIdTopicChange(set) {
+  activeId = set;
+  quizState.id = { index: 0, score: 0, revealed: false, started: false };
+  idResult.textContent = "";
+  renderTopicTabs(idTopicTabs, identificationQuizSets, activeId, onIdTopicChange);
+  renderIdForm();
+  setQuizVisibility(idForm, submitId, resetId, idResult, idStartWrap, false);
+}
+
+function onTfTopicChange(set) {
+  activeTf = set;
+  quizState.tf = { index: 0, score: 0, revealed: false, started: false };
+  tfResult.textContent = "";
+  renderTopicTabs(tfTopicTabs, tfQuizSets, activeTf, onTfTopicChange);
+  renderTfForm();
+  setQuizVisibility(tfForm, submitTf, resetTf, tfResult, tfStartWrap, false);
+}
+
+renderTopicTabs(mcqTopicTabs, mcqQuizSets, activeMcq, onMcqTopicChange);
+renderTopicTabs(idTopicTabs, identificationQuizSets, activeId, onIdTopicChange);
+renderTopicTabs(tfTopicTabs, tfQuizSets, activeTf, onTfTopicChange);
+
+renderMcqForm();
+renderIdForm();
+renderTfForm();
+setQuizVisibility(mcqForm, submitMcq, resetMcq, mcqResult, mcqStartWrap, false);
+setQuizVisibility(idForm, submitId, resetId, idResult, idStartWrap, false);
+setQuizVisibility(tfForm, submitTf, resetTf, tfResult, tfStartWrap, false);
 
 const triviaFacts = [
   "Noong WWI, nagkaroon ng pansamantalang tigil-putukan na tinawag na Christmas Truce noong 1914.",
