@@ -32,226 +32,243 @@
   </header>
 
   <main class="wrap">
-    <section id="home" class="panel visible home-panel">
-      <section class="home-banner card-shell">
-        <h2>Video Discussions</h2>
-        <p class="sub">Explore History &amp; Society</p>
-        <div class="feature-videos">
-          <article class="video-tile v1">
-            <button class="play-dot" data-go="videos" aria-label="Open Ancient Civilizations video">▶</button>
-            <p>Ancient Civilizations</p>
+    <div id="app">
+      <section id="home" class="panel visible home-panel">
+        <section class="home-banner card-shell">
+          <h2>Video Discussions</h2>
+          <p class="sub">Explore History &amp; Society</p>
+          <div class="feature-videos">
+            <article class="video-tile v1">
+              <button class="play-dot" data-go="videos" aria-label="Open Ancient Civilizations video">▶</button>
+              <p>Ancient Civilizations</p>
+            </article>
+            <article class="video-tile v2">
+              <button class="play-dot" data-go="videos" aria-label="Open American Revolution video">▶</button>
+              <p>American Revolution</p>
+            </article>
+            <article class="video-tile v3">
+              <button class="play-dot" data-go="videos" aria-label="Open World War II video">▶</button>
+              <p>World War II</p>
+            </article>
+            <article class="video-tile v4">
+              <button class="play-dot" data-go="videos" aria-label="Open Civics and Government video">▶</button>
+              <p>Civics &amp; Government</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="home-features">
+          <article class="mini-panel orange">
+            <h3>Interactive Games</h3>
+            <p>Learn through fun activities!</p>
+            <div class="emoji-art">🗺️ 🔎</div>
+            <button class="mini-btn" data-go="games">Play Now</button>
           </article>
-          <article class="video-tile v2">
-            <button class="play-dot" data-go="videos" aria-label="Open American Revolution video">▶</button>
-            <p>American Revolution</p>
+          <article class="mini-panel amber">
+            <h3>Quizzes</h3>
+            <p>Test your Social Studies Knowledge!</p>
+            <div class="emoji-art">📝 ✏️</div>
+            <button class="mini-btn" data-go="quizzes">Take a Quiz</button>
           </article>
-          <article class="video-tile v3">
-            <button class="play-dot" data-go="videos" aria-label="Open World War II video">▶</button>
-            <p>World War II</p>
+          <article class="mini-panel green">
+            <h3>Trivia Corner</h3>
+            <p>Fun Facts &amp; History Challenges!</p>
+            <div class="emoji-art">🌍 🎓</div>
+            <button class="mini-btn" data-go="trivia">Explore Trivia</button>
           </article>
-          <article class="video-tile v4">
-            <button class="play-dot" data-go="videos" aria-label="Open Civics and Government video">▶</button>
-            <p>Civics &amp; Government</p>
+        </section>
+
+        <section class="about-strip card-shell">
+          <div class="about-icon">🏫</div>
+          <div>
+            <h3>About Us</h3>
+            <p>Learn More About Our Mission</p>
+            <button class="mini-btn" data-go="about">Read More</button>
+          </div>
+          <div class="about-icon">🛒</div>
+        </section>
+
+        <section class="home-highlights">
+          <article class="highlight-card">
+            <p class="kicker">Featured Topic</p>
+            <h4>Globalisasyon</h4>
+            <p>New quiz items now available in MCQ and Tama o Mali.</p>
+          </article>
+          <article class="highlight-card">
+            <p class="kicker">Learning Mode</p>
+            <h4>Step-by-Step Quiz</h4>
+            <p>Answer one question at a time with instant explanation feedback.</p>
+          </article>
+        </section>
+      </section>
+
+      <section id="videos" class="panel">
+        <h2>Video Lessons</h2>
+        <p class="subtext">Select a topic to explore short learning videos and key focus areas.</p>
+        <div id="videoCards" class="grid-4"></div>
+      </section>
+
+      <section id="quizzes" class="panel quizzes-panel">
+        <div class="feature-hero-card">
+          <p class="section-chip">Quizzes</p>
+          <h2>Quizzes</h2>
+          <p class="subtext">Answer topic-based quizzes with instant feedback and clear explanations.</p>
+        </div>
+
+        <div id="quizTopicGrid" class="quiz-topic-grid"></div>
+
+        <div id="quizModuleArea" class="quiz-module-area quiz-module-hidden">
+          <div class="quiz-module-header">
+            <button id="quizBackToTopics" class="mini-btn" type="button">← Back to Topics</button>
+            <div class="quiz-module-title">
+              <div class="quiz-module-label">Module</div>
+              <h2 id="quizModuleTitle">Topic</h2>
+            </div>
+            <div class="quiz-module-meta" aria-hidden="true">
+              <span class="quiz-module-pill">Grade 8</span>
+            </div>
+          </div>
+
+          <div class="quiz-page-switch" id="quizPageSwitch">
+            <button class="tab active" type="button" data-quiz-page="mcqPage">Multiple Choice</button>
+            <button class="tab" type="button" data-quiz-page="idPage">Identification</button>
+            <button class="tab" type="button" data-quiz-page="tfPage">Tama o Mali</button>
+          </div>
+
+          <div id="mcqPage" class="quiz-page active quiz-shell card">
+            <h3>Multiple Choice</h3>
+            <div class="quiz-tabs" id="mcqTopicTabs"></div>
+            <div id="mcqStartWrap" class="quiz-start-wrap">
+              <button id="startMcq" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
+            </div>
+            <form id="mcqForm" class="quiz-form"></form>
+            <div class="quiz-actions">
+              <button id="resetMcq" class="cta alt" type="button">Reset</button>
+              <button id="submitMcq" class="cta">Submit Answer</button>
+            </div>
+            <div id="mcqResult" class="result-box"></div>
+          </div>
+
+          <div id="idPage" class="quiz-page quiz-shell card">
+            <h3>Identification</h3>
+            <div class="quiz-tabs" id="idTopicTabs"></div>
+            <div id="idStartWrap" class="quiz-start-wrap">
+              <button id="startId" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
+            </div>
+            <form id="idForm" class="quiz-form"></form>
+            <div class="quiz-actions">
+              <button id="resetId" class="cta alt" type="button">Reset</button>
+              <button id="submitId" class="cta">Submit Answer</button>
+            </div>
+            <div id="idResult" class="result-box"></div>
+          </div>
+
+          <div id="tfPage" class="quiz-page quiz-shell card">
+            <h3>Tama o Mali</h3>
+            <div class="quiz-tabs" id="tfTopicTabs"></div>
+            <div id="tfStartWrap" class="quiz-start-wrap">
+              <button id="startTf" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
+            </div>
+            <form id="tfForm" class="quiz-form"></form>
+            <div class="quiz-actions">
+              <button id="resetTf" class="cta alt" type="button">Reset</button>
+              <button id="submitTf" class="cta">Submit Answer</button>
+            </div>
+            <div id="tfResult" class="result-box"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="games" class="panel games-panel">
+        <div class="feature-hero-card">
+          <p class="section-chip">Interactive Games</p>
+          <h2>Interactive Games</h2>
+          <p class="subtext">Practice key topics with short game-based activities. Play, learn, and review concepts in a fun format.</p>
+        </div>
+        <div class="games-grid">
+          <article class="card">
+            <h3>History Unmasked</h3>
+            <p>Guess the historical personality from the clue.</p>
+            <div id="unmaskedGame"></div>
+          </article>
+
+          <article class="card">
+            <h3>Flag-tastic Guessing Game</h3>
+            <p>Pick the correct country name for each clue.</p>
+            <div id="flagGame"></div>
+          </article>
+
+          <article class="card full">
+            <h3>Decode the Past: 4 Pics Challenge</h3>
+            <p>Reveal each concept and read the explanation.</p>
+            <div id="decodeGame" class="decode-grid"></div>
           </article>
         </div>
       </section>
 
-      <section class="home-features">
-        <article class="mini-panel orange">
-          <h3>Interactive Games</h3>
-          <p>Learn through fun activities!</p>
-          <div class="emoji-art">🗺️ 🔎</div>
-          <button class="mini-btn" data-go="games">Play Now</button>
+      <section id="trivia" class="panel trivia-panel">
+        <article class="trivia-hero card">
+          <p class="trivia-icon">📚</p>
+          <h2>Trivia Corner</h2>
+          <p class="subtext">
+            <strong>Trivia</strong> means interesting facts that make you curious.
+          </p>
         </article>
-        <article class="mini-panel amber">
-          <h3>Quizzes &amp; Challenges</h3>
-          <p>Test your Social Studies Knowledge!</p>
-          <div class="emoji-art">📝 ✏️</div>
-          <button class="mini-btn" data-go="quizzes">Take a Quiz</button>
-        </article>
-        <article class="mini-panel green">
-          <h3>Trivia Corner</h3>
-          <p>Fun Facts &amp; History Challenges!</p>
-          <div class="emoji-art">🌍 🎓</div>
-          <button class="mini-btn" data-go="trivia">Explore Trivia</button>
-        </article>
+
+        <h3 class="trivia-section-title">Did you know?</h3>
+        <div id="triviaList" class="trivia-list"></div>
       </section>
 
-      <section class="about-strip card-shell">
-        <div class="about-icon">🏫</div>
-        <div>
-          <h3>About Us</h3>
-          <p>Learn More About Our Mission</p>
-          <button class="mini-btn" data-go="about">Read More</button>
-        </div>
-        <div class="about-icon">🛒</div>
+      <section id="about" class="panel about-panel">
+        <article class="about-card about-hero">
+          <p class="about-icon-badge">📘</p>
+          <h2>About Us</h2>
+          <p class="about-lead">
+            This page summarizes the <strong>research background</strong>, <strong>purpose</strong>, and
+            <strong>researcher profiles</strong> for the Social Studies Explorers Hub.
+          </p>
+        </article>
+
+        <article class="about-card">
+          <h3>Researcher's Background</h3>
+          <p>
+            Hi! We are third-year students from Batangas State University ARASOF Nasugbu Campus, majoring in Social
+            Studies. We created this website as part of our research about how social media can help improve students'
+            learning in Social Studies.
+          </p>
+          <p>
+            Based on our study, we discovered that platforms like videos and online content can make learning more fun,
+            engaging, and easier to understand.
+          </p>
+        </article>
+
+        <article class="about-card">
+          <h3>Purpose</h3>
+          <p>The Social Studies Explorers Hub was built as a space where learners can:</p>
+          <ul class="clean-list">
+            <li>Watch video lessons</li>
+            <li>Play interactive games</li>
+            <li>Answer quizzes</li>
+            <li>Explore fun history trivia</li>
+          </ul>
+        </article>
+
+        <article class="about-card">
+          <h3>Our Mission</h3>
+          <p class="hero-line">"Explore the Past, Engage the Present, Learn for the Future"</p>
+          <div class="about-badges">
+            <span>Future Educators</span>
+            <span>Interactive Learning</span>
+            <span>Technology-Driven</span>
+          </div>
+          <p>
+            We hope this platform helps learners enjoy World History while improving their knowledge. As future
+            educators, our goal is to transform traditional learning into a more interactive, engaging, and
+            technology-driven experience that supports better academic performance.
+          </p>
+        </article>
       </section>
-
-      <section class="home-highlights">
-        <article class="highlight-card">
-          <p class="kicker">Featured Topic</p>
-          <h4>Globalisasyon</h4>
-          <p>New quiz items now available in MCQ and Tama o Mali.</p>
-        </article>
-        <article class="highlight-card">
-          <p class="kicker">Learning Mode</p>
-          <h4>Step-by-Step Quiz</h4>
-          <p>Answer one question at a time with instant explanation feedback.</p>
-        </article>
-      </section>
-    </section>
-
-    <section id="videos" class="panel">
-      <h2>Video Lessons</h2>
-      <p class="subtext">Select a topic to explore short learning videos and key focus areas.</p>
-      <div id="videoCards" class="grid-4"></div>
-    </section>
-
-    <section id="quizzes" class="panel quizzes-panel">
-      <div class="feature-hero-card">
-        <p class="section-chip">Quizzes</p>
-        <h2>Quizzes</h2>
-        <p class="subtext">Answer topic-based quizzes with instant feedback and clear explanations.</p>
-      </div>
-
-      <div class="quiz-page-switch" id="quizPageSwitch">
-        <button class="tab active" type="button" data-quiz-page="mcqPage">Quiz 1 - Multiple Choice</button>
-        <button class="tab" type="button" data-quiz-page="idPage">Quiz 2 - Identification</button>
-        <button class="tab" type="button" data-quiz-page="tfPage">Quiz 3 - Tama o Mali</button>
-      </div>
-
-      <div id="mcqPage" class="quiz-page active quiz-shell card">
-        <h3>Multiple Choice Quiz</h3>
-        <div class="quiz-tabs" id="mcqTopicTabs"></div>
-        <div id="mcqStartWrap" class="quiz-start-wrap">
-          <button id="startMcq" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
-        </div>
-        <form id="mcqForm" class="quiz-form"></form>
-        <div class="quiz-actions">
-          <button id="submitMcq" class="cta">Submit Answers</button>
-          <button id="resetMcq" class="cta alt" type="button">Reset</button>
-        </div>
-        <div id="mcqResult" class="result-box"></div>
-      </div>
-
-      <div id="idPage" class="quiz-page quiz-shell card">
-        <h3>Identification Quiz</h3>
-        <div class="quiz-tabs" id="idTopicTabs"></div>
-        <div id="idStartWrap" class="quiz-start-wrap">
-          <button id="startId" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
-        </div>
-        <form id="idForm" class="quiz-form"></form>
-        <div class="quiz-actions">
-          <button id="submitId" class="cta">Submit Answers</button>
-          <button id="resetId" class="cta alt" type="button">Reset</button>
-        </div>
-        <div id="idResult" class="result-box"></div>
-      </div>
-
-      <div id="tfPage" class="quiz-page quiz-shell card">
-        <h3>Tama o Mali Quiz</h3>
-        <div class="quiz-tabs" id="tfTopicTabs"></div>
-        <div id="tfStartWrap" class="quiz-start-wrap">
-          <button id="startTf" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
-        </div>
-        <form id="tfForm" class="quiz-form"></form>
-        <div class="quiz-actions">
-          <button id="submitTf" class="cta">Submit Answers</button>
-          <button id="resetTf" class="cta alt" type="button">Reset</button>
-        </div>
-        <div id="tfResult" class="result-box"></div>
-      </div>
-    </section>
-
-    <section id="games" class="panel games-panel">
-      <div class="feature-hero-card">
-        <p class="section-chip">Interactive Games</p>
-        <h2>Interactive Games</h2>
-        <p class="subtext">Practice key topics with short game-based activities. Play, learn, and review concepts in a fun format.</p>
-      </div>
-      <div class="games-grid">
-        <article class="card">
-          <h3>History Unmasked</h3>
-          <p>Guess the historical personality from the clue.</p>
-          <div id="unmaskedGame"></div>
-        </article>
-
-        <article class="card">
-          <h3>Flag-tastic Guessing Game</h3>
-          <p>Pick the correct country name for each clue.</p>
-          <div id="flagGame"></div>
-        </article>
-
-        <article class="card full">
-          <h3>Decode the Past: 4 Pics Challenge</h3>
-          <p>Reveal each concept and read the explanation.</p>
-          <div id="decodeGame" class="decode-grid"></div>
-        </article>
-      </div>
-    </section>
-
-    <section id="trivia" class="panel trivia-panel">
-      <article class="trivia-hero card">
-        <p class="trivia-icon">📚</p>
-        <h2>Trivia Corner</h2>
-        <p class="subtext">
-          <strong>Trivia</strong> means interesting facts that make you curious.
-        </p>
-      </article>
-
-      <h3 class="trivia-section-title">Did you know?</h3>
-      <div id="triviaList" class="trivia-list"></div>
-    </section>
-
-    <section id="about" class="panel about-panel">
-      <article class="about-card about-hero">
-        <p class="about-icon-badge">📘</p>
-        <h2>About Us</h2>
-        <p class="about-lead">
-          This page summarizes the <strong>research background</strong>, <strong>purpose</strong>, and
-          <strong>researcher profiles</strong> for the Social Studies Explorers Hub.
-        </p>
-      </article>
-
-      <article class="about-card">
-        <h3>Researcher's Background</h3>
-        <p>
-          Hi! We are third-year students from Batangas State University ARASOF Nasugbu Campus, majoring in Social
-          Studies. We created this website as part of our research about how social media can help improve students'
-          learning in Social Studies.
-        </p>
-        <p>
-          Based on our study, we discovered that platforms like videos and online content can make learning more fun,
-          engaging, and easier to understand.
-        </p>
-      </article>
-
-      <article class="about-card">
-        <h3>Purpose</h3>
-        <p>The Social Studies Explorers Hub was built as a space where learners can:</p>
-        <ul class="clean-list">
-          <li>Watch video lessons</li>
-          <li>Play interactive games</li>
-          <li>Answer quizzes</li>
-          <li>Explore fun history trivia</li>
-        </ul>
-      </article>
-
-      <article class="about-card">
-        <h3>Our Mission</h3>
-        <p class="hero-line">"Explore the Past, Engage the Present, Learn for the Future"</p>
-        <div class="about-badges">
-          <span>Future Educators</span>
-          <span>Interactive Learning</span>
-          <span>Technology-Driven</span>
-        </div>
-        <p>
-          We hope this platform helps learners enjoy World History while improving their knowledge. As future
-          educators, our goal is to transform traditional learning into a more interactive, engaging, and
-          technology-driven experience that supports better academic performance.
-        </p>
-      </article>
-    </section>
+    </div>
   </main>
 
   <footer class="site-footer">

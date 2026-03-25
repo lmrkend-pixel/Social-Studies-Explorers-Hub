@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Studies Explorers Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<section id="quizzes" class="panel quizzes-panel">
+  <div class="feature-hero-card">
+    <p class="section-chip">Quizzes</p>
+    <h2>Quizzes</h2>
+    <p class="subtext">Answer topic-based quizzes with instant feedback and clear explanations.</p>
+  </div>
+
+  <div id="quizTopicGrid" class="quiz-topic-grid"></div>
+
+  <div id="quizModuleArea" class="quiz-module-area quiz-module-hidden">
+    <div class="quiz-module-header">
+      <button id="quizBackToTopics" class="mini-btn" type="button">← Back to Topics</button>
+      <div class="quiz-module-title">
+        <div class="quiz-module-label">Module</div>
+        <h2 id="quizModuleTitle">Topic</h2>
+      </div>
+      <div class="quiz-module-meta" aria-hidden="true">
+        <span class="quiz-module-pill">Grade 8</span>
+      </div>
+    </div>
+
+    <div class="quiz-page-switch" id="quizPageSwitch">
+      <button class="tab active" type="button" data-quiz-page="mcqPage">Multiple Choice</button>
+      <button class="tab" type="button" data-quiz-page="idPage">Identification</button>
+      <button class="tab" type="button" data-quiz-page="tfPage">Tama o Mali</button>
+    </div>
+
+    <div id="mcqPage" class="quiz-page active quiz-shell card">
+      <h3>Multiple Choice</h3>
+      <div class="quiz-tabs" id="mcqTopicTabs"></div>
+      <div id="mcqStartWrap" class="quiz-start-wrap">
+        <button id="startMcq" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
+      </div>
+      <form id="mcqForm" class="quiz-form"></form>
+      <div class="quiz-actions">
+        <button id="resetMcq" class="cta alt" type="button">Reset</button>
+        <button id="submitMcq" class="cta">Submit Answer</button>
+      </div>
+      <div id="mcqResult" class="result-box"></div>
+    </div>
+
+    <div id="idPage" class="quiz-page quiz-shell card">
+      <h3>Identification</h3>
+      <div class="quiz-tabs" id="idTopicTabs"></div>
+      <div id="idStartWrap" class="quiz-start-wrap">
+        <button id="startId" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
+      </div>
+      <form id="idForm" class="quiz-form"></form>
+      <div class="quiz-actions">
+        <button id="resetId" class="cta alt" type="button">Reset</button>
+        <button id="submitId" class="cta">Submit Answer</button>
+      </div>
+      <div id="idResult" class="result-box"></div>
+    </div>
+
+    <div id="tfPage" class="quiz-page quiz-shell card">
+      <h3>Tama o Mali</h3>
+      <div class="quiz-tabs" id="tfTopicTabs"></div>
+      <div id="tfStartWrap" class="quiz-start-wrap">
+        <button id="startTf" class="cta quiz-start-btn" type="button">TAKE THE QUIZ NOW</button>
+      </div>
+      <form id="tfForm" class="quiz-form"></form>
+      <div class="quiz-actions">
+        <button id="resetTf" class="cta alt" type="button">Reset</button>
+        <button id="submitTf" class="cta">Submit Answer</button>
+      </div>
+      <div id="tfResult" class="result-box"></div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

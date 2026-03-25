@@ -478,6 +478,40 @@ const identificationQuizSets = [
         answers: ["domino theory", "teoryang domino"]
       }
     ]
+  },
+  {
+    id: "glob-id",
+    title: "Globalisasyon",
+    questions: [
+      {
+        q: "1) Ano ang pinakamalapit na kahulugan ng globalisasyon?",
+        answers: [
+          "pagsasama-sama ng ekonomiya, kultura, at politika ng mga bansa",
+          "globalisasyon"
+        ],
+        explanation: "Ang globalisasyon ay proseso ng pag-uugnay ng mga bansa sa aspeto ng ekonomiya, kultura, at politika."
+      },
+      {
+        q: "2) Alin ang halimbawa ng political globalization?",
+        answers: ["asean", "asean organization"],
+        explanation: "Ang ASEAN ay organisasyong nagtataguyod ng kooperasyong politikal sa pagitan ng mga bansa."
+      },
+      {
+        q: "3) Bakit may epekto ang globalisasyon sa soberanya ng estado?",
+        answers: ["pandaigdigang kasunduan", "international agreements", "treaties"],
+        explanation: "Dahil sa treaties at international agreements, may mga desisyong kailangang iayon ng bansa sa pamantayan."
+      },
+      {
+        q: "4) Ano ang pangunahing layunin ng free trade?",
+        answers: ["palayain ang daloy ng produkto", "alisin ang tariffs", "free flow of products"],
+        explanation: "Nilalayon nitong alisin ang hadlang tulad ng tariffs para mapadali ang palitan ng produkto."
+      },
+      {
+        q: "5) Ano ang outsourcing?",
+        answers: ["paglipat ng produksyon sa ibang bansa", "delegate work to another country", "pag-delegate ng trabaho"],
+        explanation: "Ang outsourcing ay pag-delegate ng trabaho/produksyon sa ibang lugar para makatipid."
+      }
+    ]
   }
 ];
 
@@ -626,13 +660,83 @@ function switchQuizPage(pageId) {
   quizPageButtons.forEach((btn) => btn.classList.toggle("active", btn.dataset.quizPage === pageId));
 }
 
+function autoStartQuiz(pageId) {
+  if (pageId === "mcqPage" && startMcq) startMcq.click();
+  if (pageId === "idPage" && startId) startId.click();
+  if (pageId === "tfPage" && startTf) startTf.click();
+}
+
 quizPageButtons.forEach((btn) => {
-  btn.addEventListener("click", () => switchQuizPage(btn.dataset.quizPage));
+  btn.addEventListener("click", () => {
+    const targetPage = btn.dataset.quizPage;
+    const currentActive = Array.from(quizPages).find((p) => p.classList.contains("active"))?.id;
+    if (targetPage === currentActive) return;
+    showQuizConfirmModal({
+      title: "Ready to Take Quiz?",
+      body:
+        "Click Start to begin the quiz. Answer one question at a time, then move to the next question.",
+      yesText: "Start Quiz",
+      noText: "Cancel",
+      onYes: () => {
+        switchQuizPage(targetPage);
+        autoStartQuiz(targetPage);
+      }
+    });
+  });
 });
+
+function showQuizConfirmModal({ title, body, yesText, noText, onYes }) {
+  // Ensure single modal at a time
+  const existing = document.querySelector(".quiz-modal-overlay");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.className = "quiz-modal-overlay";
+
+  const modal = document.createElement("div");
+  modal.className = "quiz-modal";
+
+  modal.innerHTML = `
+    <p class="quiz-modal-title">🎯 ${title}</p>
+    <div class="quiz-modal-body">
+      <p style="margin: 0;">${body}</p>
+    </div>
+    <div class="quiz-modal-actions">
+      <button type="button" class="quiz-modal-btn quiz-modal-btn-primary">${yesText}</button>
+      <button type="button" class="quiz-modal-btn quiz-modal-btn-cancel">${noText}</button>
+    </div>
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  const removeModal = () => {
+    overlay.remove();
+    document.removeEventListener("keydown", onKeyDown);
+  };
+
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) removeModal();
+  });
+
+  const yesBtn = modal.querySelector("button.quiz-modal-btn-primary");
+  const noBtn = modal.querySelector("button.quiz-modal-btn-cancel");
+  yesBtn.addEventListener("click", () => {
+    removeModal();
+    if (typeof onYes === "function") onYes();
+  });
+  noBtn.addEventListener("click", removeModal);
+
+  const onKeyDown = (e) => {
+    if (e.key === "Escape") removeModal();
+  };
+  document.addEventListener("keydown", onKeyDown);
+}
 
 function updateQuizProgress(formEl, quizSet, state, typeTag) {
   const total = quizSet.questions.length;
   const answered = Math.min(state.index + (state.revealed ? 1 : 0), total);
+  const currentQuestion = Math.min(state.index + 1, total);
   const progressNode = formEl.querySelector(".quiz-progress");
   if (!progressNode) return;
 
@@ -645,7 +749,7 @@ function updateQuizProgress(formEl, quizSet, state, typeTag) {
 
   if (fill) fill.style.width = `${pct}%`;
   if (scoreNode) scoreNode.textContent = state.score;
-  if (progress) progress.textContent = `${answered}/${total}`;
+  if (progress) progress.textContent = `${currentQuestion} of ${total}`;
   if (typeNode) typeNode.textContent = typeTag;
 }
 
@@ -679,7 +783,7 @@ function renderMcqForm() {
   progress.innerHTML = `
     <span class="meta">
       <span class="type-value">MCQ</span>
-      <span>Score: <span class="score-value">${state.score}</span> | Progress: <span class="progress-value">0/${total}</span></span>
+      <span>Question <span class="progress-value">0 of ${total}</span></span>
     </span>
     <span class="track"><span class="fill"></span></span>
   `;
@@ -696,19 +800,19 @@ function renderMcqForm() {
   }
 
   const question = activeMcq.questions[state.index];
-  const fieldset = document.createElement("fieldset");
-  fieldset.className = "quiz-item";
-  fieldset.innerHTML = `<legend>${question.q}</legend>`;
-  question.options.forEach((opt, index) => {
+    const fieldset = document.createElement("fieldset");
+    fieldset.className = "quiz-item";
+    fieldset.innerHTML = `<legend>${question.q}</legend>`;
+    question.options.forEach((opt, index) => {
     const id = `${activeMcq.id}-${state.index}-${index}`;
-    const label = document.createElement("label");
-    label.setAttribute("for", id);
-    label.innerHTML = `
+      const label = document.createElement("label");
+      label.setAttribute("for", id);
+      label.innerHTML = `
       <input id="${id}" type="radio" name="${activeMcq.id}-${state.index}" value="${index}" />
-      ${opt}
-    `;
-    fieldset.appendChild(label);
-  });
+        ${opt}
+      `;
+      fieldset.appendChild(label);
+    });
   fieldset.innerHTML += `<p id="mcqFeedback" class="game-result"></p>`;
   mcqForm.appendChild(fieldset);
 
@@ -726,7 +830,7 @@ function renderIdForm() {
   progress.innerHTML = `
     <span class="meta">
       <span class="type-value">Identification</span>
-      <span>Score: <span class="score-value">${state.score}</span> | Progress: <span class="progress-value">0/${total}</span></span>
+      <span>Question <span class="progress-value">0 of ${total}</span></span>
     </span>
     <span class="track"><span class="fill"></span></span>
   `;
@@ -767,7 +871,7 @@ function renderTfForm() {
   progress.innerHTML = `
     <span class="meta">
       <span class="type-value">Tama o Mali</span>
-      <span>Score: <span class="score-value">${state.score}</span> | Progress: <span class="progress-value">0/${total}</span></span>
+      <span>Question <span class="progress-value">0 of ${total}</span></span>
     </span>
     <span class="track"><span class="fill"></span></span>
   `;
@@ -971,6 +1075,70 @@ renderTfForm();
 setQuizVisibility(mcqForm, submitMcq, resetMcq, mcqResult, mcqStartWrap, false);
 setQuizVisibility(idForm, submitId, resetId, idResult, idStartWrap, false);
 setQuizVisibility(tfForm, submitTf, resetTf, tfResult, tfStartWrap, false);
+
+  // --- Topic cards UI (select topic -> reveal module with 3 quiz types) ---
+  const quizTopicGrid = document.getElementById("quizTopicGrid");
+  const quizModuleArea = document.getElementById("quizModuleArea");
+  const quizBackToTopics = document.getElementById("quizBackToTopics");
+  const quizModuleTitle = document.getElementById("quizModuleTitle");
+
+  if (quizTopicGrid && quizModuleArea && quizModuleTitle) {
+    const topicModules = [
+      { key: "imp", title: "Imperyalismo at Kolonyalismo", mcqId: "imp", idId: "imp-id", tfId: "imp-tf" },
+      { key: "ww1", title: "Unang Digmaang Pandaigdig", mcqId: "ww1", idId: "ww1-id", tfId: "ww1-tf" },
+      { key: "ww2", title: "Ikalawang Digmaang Pandaigdig", mcqId: "ww2", idId: "ww2-id", tfId: "ww2-tf" },
+      { key: "cold", title: "Cold War", mcqId: "cold", idId: "cold-id", tfId: "cold-tf" },
+      { key: "glob", title: "Globalisasyon", mcqId: "glob-mcq", idId: "glob-id", tfId: "glob-tf" }
+    ];
+
+    function setModuleForTopic(topic) {
+      const mcqSet = mcqQuizSets.find((s) => s.id === topic.mcqId);
+      const idSet = identificationQuizSets.find((s) => s.id === topic.idId);
+      const tfSet = tfQuizSets.find((s) => s.id === topic.tfId);
+      if (!mcqSet || !idSet || !tfSet) return;
+
+      quizModuleTitle.textContent = topic.title;
+
+      // Reveal module UI
+      quizModuleArea.classList.remove("quiz-module-hidden");
+      quizTopicGrid.classList.add("quiz-hidden");
+      quizTopicGrid.style.display = "none";
+
+      // Force first quiz type tab on topic switch (MCQ)
+      switchQuizPage("mcqPage");
+
+      // Update active topic for all quiz types
+      onMcqTopicChange(mcqSet);
+      onIdTopicChange(idSet);
+      onTfTopicChange(tfSet);
+    }
+
+    quizTopicGrid.innerHTML = "";
+    topicModules.forEach((t, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "quiz-topic-card quiz-topic-card-available";
+      btn.innerHTML = `
+        <div class="quiz-topic-card-top">
+          <span class="quiz-topic-index">${idx + 1}</span>
+          <span class="quiz-topic-status">AVAILABLE</span>
+        </div>
+        <div class="quiz-topic-card-title">${t.title}</div>
+        <div class="quiz-topic-card-sub">Start this module</div>
+        <div class="quiz-topic-card-cta">Start Quiz</div>
+      `;
+      btn.addEventListener("click", () => setModuleForTopic(t));
+      quizTopicGrid.appendChild(btn);
+    });
+
+    if (quizBackToTopics) {
+      quizBackToTopics.addEventListener("click", () => {
+        quizModuleArea.classList.add("quiz-module-hidden");
+        quizTopicGrid.classList.remove("quiz-hidden");
+        quizTopicGrid.style.display = "";
+      });
+    }
+  }
 
 const triviaFacts = [
   {
